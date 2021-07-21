@@ -58,7 +58,7 @@ class bubbles(QWidget):
         self.setWindowTitle("JohannasUI")
         self.loadWindowSettings()
 
-        self.adc = adc.ADS1114(0x48)
+        self.adc = adc.ADS1115(0x48)
         self.sensor1 = MOS(self.adc, 0)
         self.sensor2 = MOS(self.adc, 1)
 
@@ -92,11 +92,11 @@ class bubbles(QWidget):
         self.spinLabel1 = QLabel("Gas 1 Concentration", self)
         self.spinLabel2 = QLabel("Gas 2 Concentration", self)
 
-        self.sensorReading = QLabel()
+        self.sensor1Reading = QLabel()
         self.sensor2Reading = QLabel()
 
-        self.sensor1Reading.setText('Sensor 1 Concentration: \n{} ppm'.format(self.sensor1Array[-1]))
-        self.sensor2Reading.setText('Sensor 2 Concentration: \n{} ppm'.format(self.sensor2Array[-1]))
+        self.sensor1Reading.setText('Sensor 1 Concentration: \n{:.2f} ppm'.format(self.sensor1Array[-1]))
+        self.sensor2Reading.setText('Sensor 2 Concentration: \n{:.2f} ppm'.format(self.sensor2Array[-1]))
 
 
         self.graphTimer = QTimer()
@@ -123,7 +123,7 @@ class bubbles(QWidget):
         self.chicken = pg.mkPen(color=(47, 209, 214), width=2)
         self.sensor1Plot = self.sensorGraph.plot(self.timeArray, self.sensor1Array, pen="r")
         self.sensor2Plot = self.sensorGraph.plot(self.timeArray, self.sensor2Array, pen=self.chicken)
-        self.sensorGraph.setYRange(0, 100)
+        self.sensorGraph.setYRange(0, 5)
         self.flowPlot = self.flowGraph.plot(self.timeArray, self.flowArray, pen=self.chicken)
         self.flowGraph.setYRange(0, 100)
 
@@ -142,8 +142,8 @@ class bubbles(QWidget):
         self.flowPlot.setData(self.timeArray, self.flowArray)
 
     def updateLabel(self):
-        self.sensor1Reading.setText('Sensor 1 Concentration:\n{} ppm'.format(self.sensor1Array[-1]))
-        self.sensor2Reading.setText('Sensor 2 Concentration:\n{} ppm'.format(self.sensor2Array[-1]))
+        self.sensor1Reading.setText('Sensor 1 Concentration:\n{:.2f} ppm'.format(self.sensor1Array[-1]))
+        self.sensor2Reading.setText('Sensor 2 Concentration:\n{:.2f} ppm'.format(self.sensor2Array[-1]))
 
     def loadUI(self):
         self.layout = QGridLayout()
@@ -193,7 +193,7 @@ class bubbles(QWidget):
     def loadWindowSettings(self):
         self.width = 700
         self.height = 520
-        self.bg_color = '#484848'
+        self.bg_color = '#e3e1dc'
         self.setStyleSheet('background-color: {}'.format(self.bg_color))
         self.setGeometry(0, 0, self.width, self.height)
         print("Window Settings Loaded")
