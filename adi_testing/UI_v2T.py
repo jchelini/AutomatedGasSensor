@@ -69,24 +69,28 @@ class sensor(QObject):
 
 		self.signalArray = [0 for _ in range(200)]
 		self.timer = QTimer()
-		self.timer.timeout.connect(lambda: self.updateTest())
+		self.timer.timeout.connect(lambda: self.update())
 		#self.loadADCSettings()
 		self.counter = 0
 		self.timer.start(1)
 
-	def updateTest(self):
+	# def updateTest(self):
+	# 	self.signalArray = self.signalArray[1:]
+	# 	try:
+	# 		self.signalArray.append(math.sin(self.counter + self.shift))
+	# 	except:
+	# 		self.signalArray.append(self.signalArray[-1])
+	# 	self.mainSignal.emit(self.signalArray)
+	# 	self.counter += 0.01
+
+	def update(self):
 		self.signalArray = self.signalArray[1:]
 		try:
-			self.signalArray.append(math.sin(self.counter + self.shift))
+			self.signalArray.append(round((self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144), 3)
 		except:
 			self.signalArray.append(self.signalArray[-1])
-		self.mainSignal.emit(self.signalArray)
-		self.counter += 0.01
 
-	# def update(self):
-	# 	self.signalArray = self.signalArray[1:]
-	# 	self.signalArray.append(round((self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144), 3)
-	# 	self.mainSignal.emit(self.signalArray)
+		self.mainSignal.emit(self.signalArray)
 
 	def startSensor(self):
 		if not self.timer.isActive():
@@ -100,19 +104,18 @@ class sensor(QObject):
 class fillBox(QObject):
 	doneFillSignal = pyqtSignal()
 
-	def __init__(self, value, valve):
+	def __init__(self, valve):
 		super(fillBox, self).__init__()
 		self.valve = valve
-		self.value = value
 		self.rate = 30
 		self.chamberVolume = 2.5 * 1000  # L in cubic centimeters
 
 
 	def conc2Time(self, value):
-		return 2 * self.value * self.chamberVolume / 10e6
+		return 2 * value * self.chamberVolume / 10e6
 
 	def fill(self, value):
-		self.time = self.conc2Time(self.value)
+		self.time = self.conc2Time(value)
 		self.valve.enable()
 		time.sleep(self.time)
 		self.valve.disable()
@@ -232,9 +235,8 @@ class mainWindow(QWidget):
 	def fill(self):
 		self.g1Val = self.g1box.value()
 		self.g2Val = self.g2box.value()
-		fillBox(self.g1Val, self.v1)
-		fillBox(self.g2Val, self.v2)
-
+		self.fillBox_v1.fill(self.g1Val)
+		self.fillBox_v2.fill(self.g2Val)
 
 	@pyqtSlot()
 	def fill_g1(self):
@@ -255,12 +257,11 @@ class mainWindow(QWidget):
 
 
 def main():
-    window = mainWindow()
-    window.show()
-    sys.exit(app.exec_())
+	window = mainWindow()
+	window.show()
+	sys.exit(app.exec_())
 	GPIO.cleanup()
 
 
-
 if __name__ == "__main__":
-    main()
+	main()
