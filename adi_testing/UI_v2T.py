@@ -11,6 +11,8 @@ from PyQt5.QtCore import *
 
 import pyqtgraph as pg
 
+import RPi.GPIO as GPIO
+
 app = QApplication(sys.argv)
 GPIO.setmode(GPIO.BOARD)
 
@@ -243,12 +245,6 @@ class mainWindow(QWidget):
 
 	def vent(self):
 		self.v3.enable()
-
-
-
-
-
-
 
 
 def main():
