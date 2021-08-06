@@ -86,10 +86,9 @@ class sensor(QObject):
 
 	def update(self):
 		self.signalArray = self.signalArray[1:]
-		try:
-			self.signalArray.append(round((self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144), 3)
-		except:
-			self.signalArray.append(self.signalArray[-1])
+		#try:
+		self.signalArray.append(round((self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144), 3)
+		#self.signalArray.append(self.signalArray[-1])
 
 		self.mainSignal.emit(self.signalArray)
 
