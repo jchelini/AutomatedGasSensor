@@ -1,3 +1,5 @@
+import resource
+
 import numpy as np
 import os
 import sys
@@ -9,6 +11,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 import pyqtgraph as pg
+
+from resource import *
 
 app = QApplication(sys.argv)
 
@@ -41,13 +45,13 @@ class sensor(QObject):
         self.counter = 0
         self.timer = QTimer()
         self.timer.timeout.connect(lambda: self.update())
-        self.timer.start(100)
+        self.timer.start(1)
 
     def update(self):
         self.signalArray = self.signalArray[1:]
         self.signalArray.append(math.sin(self.counter + self.shift))
         self.mainSignal.emit(self.signalArray)
-        self.counter += 0.1
+        self.counter += 0.01
 
     def startSensor(self):
         if not self.timer.isActive():
@@ -56,10 +60,6 @@ class sensor(QObject):
     def stopSensor(self):
         if self.timer.isActive():
             self.timer.stop()
-
-
-    # def run(self):
-    #     self.timer.start(100)
 
 
 class simpleWindow(QWidget):
@@ -87,12 +87,24 @@ class simpleWindow(QWidget):
         self.sensor1.mainSignal.connect(self.update)
         self.sensor1Thread.start()
 
-        self.sensor2Thread = QThread()
+        #self.sensor2Thread = QThread()
         self.sensor2 = sensor(1)
-        self.sensor2.moveToThread(self.sensor1Thread)
+        #self.sensor2.moveToThread(self.sensor1Thread)
 
         self.sensor2.mainSignal.connect(self.update2)
-        self.sensor2Thread.start()
+        #self.sensor2Thread.start()
+
+    def loadGraph(self):
+        self.sensorGraph = graph()
+
+        self.timeArray = list(range(200))
+        self.sensor1Array = [0 for _ in range(200)]
+        self.sensor2Array = [0 for _ in range(200)]
+        self.chicken = pg.mkPen(color=(47, 209, 214), width=2)
+        self.sensor1Plot = self.sensorGraph.plot(self.timeArray, self.sensor1Array, pen=self.chicken)
+        self.sensor2Plot = self.sensorGraph.plot(self.timeArray, self.sensor2Array, pen='r')
+
+        self.sensorGraph.setYRange(-1.5, 1.5)
 
     def loadButtons(self):
         self.b1 = button("Start")
@@ -109,15 +121,7 @@ class simpleWindow(QWidget):
         self.sensor1.stopSensor()
         self.sensor2.stopSensor()
 
-    def loadGraph(self):
-        self.sensorGraph = graph()
 
-        self.timeArray = list(range(200))
-        self.sensor1Array = [0 for _ in range(200)]
-        self.sensor2Array = [0 for _ in range(200)]
-        self.chicken = pg.mkPen(color=(47, 209, 214), width=2)
-        self.sensor1Plot = self.sensorGraph.plot(self.timeArray, self.sensor1Array, pen=self.chicken)
-        self.sensor2Plot = self.sensorGraph.plot(self.timeArray, self.sensor2Array, pen='r')
 
     @pyqtSlot(object)
     def update(self, sensArray):
