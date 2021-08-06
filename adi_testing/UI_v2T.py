@@ -243,7 +243,7 @@ class mainWindow(QWidget):
 		print("Done Filling G1")
 
 	@pyqtSlot()
-	def fill_g2(self, value):
+	def fill_g2(self):
 		print("Done Filling G2")
 
 	def stop(self):
