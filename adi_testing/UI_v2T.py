@@ -209,10 +209,21 @@ class mainWindow(QWidget):
 		self.g1box = csSpinBox()
 		self.g2box = csSpinBox()
 
+		self.g1L = QLabel("GAS 1")
+		#self.g1L.setText("GAS 1")
+
+		self.g2L = QLabel()
+		self.g2L.setText("GAS 2")
+
+		#self.g1Conc = QLabel()
+
+
 	def loadUI(self):
 		self.layout = QGridLayout()
 
 		self.layout.addWidget(self.graph, 0, 0, 3, 3)
+		self.layout.addWidget(self.g1L, 3, 0, 1, 1)
+		self.layout.addWidget(self.g2L, 3, 1, 1, 1)
 		self.layout.addWidget(self.g1box, 4, 0, 1, 1)
 		self.layout.addWidget(self.g2box, 4, 1, 1, 1)
 		self.layout.addWidget(self.b1, 5, 0, 1, 1)
