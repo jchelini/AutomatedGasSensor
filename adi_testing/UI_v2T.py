@@ -154,7 +154,7 @@ class mainWindow(QWidget):
 		self.graph.setYRange(-1.5, 1.5)
 
 	def loadComponents(self):
-		# self.adc = adc.ADS1115(0x48)
+		self.adc = adc.ADS1115(0x48)
 		self.v1 = valve(16)  #G1
 		self.v2 = valve(18)  #G2
 		self.v3 = valve(22)  #AIR
@@ -162,13 +162,13 @@ class mainWindow(QWidget):
 
 	def loadThread(self):
 		self.sensor1Thread = QThread()
-		self.sensor1 = sensor(0.1)
+		self.sensor1 = sensor(adc=self.adc, channel=0)
 		self.sensor1.moveToThread(self.sensor1Thread)
 		self.sensor1.mainSignal.connect(self.update)
 		self.sensor1Thread.start()
 
 		self.sensor2Thread = QThread()
-		self.sensor2 = sensor(1)
+		self.sensor2 = sensor(adc=self.adc, channel=1)
 		self.sensor2.moveToThread(self.sensor1Thread)
 		self.sensor2.mainSignal.connect(self.update2)
 		self.sensor2Thread.start()
