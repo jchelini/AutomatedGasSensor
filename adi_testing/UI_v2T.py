@@ -116,6 +116,7 @@ class fillBox(QObject):
 
 	def fill(self, value):
 		self.time = self.conc2Time(value)
+		print(self.time)
 		self.valve.enable()
 		time.sleep(self.time)
 		self.valve.disable()
