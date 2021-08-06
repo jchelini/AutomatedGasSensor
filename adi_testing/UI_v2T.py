@@ -151,7 +151,7 @@ class mainWindow(QWidget):
 		self.sensor1Plot = self.graph.plot(self.timeArray, self.sensor1Array, pen=self.chicken)
 		self.sensor2Plot = self.graph.plot(self.timeArray, self.sensor2Array, pen='r')
 
-		self.graph.setYRange(-1.5, 1.5)
+		self.graph.setYRange(0, 5)
 
 	def loadComponents(self):
 		self.adc = adc.ADS1115(0x48)
