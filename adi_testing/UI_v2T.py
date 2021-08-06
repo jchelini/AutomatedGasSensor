@@ -76,7 +76,10 @@ class sensor(QObject):
 
 	def updateTest(self):
 		self.signalArray = self.signalArray[1:]
-		self.signalArray.append(math.sin(self.counter + self.shift))
+		try:
+			self.signalArray.append(math.sin(self.counter + self.shift))
+		except:
+			self.signalArray.append(self.signalArray[-1])
 		self.mainSignal.emit(self.signalArray)
 		self.counter += 0.01
 
@@ -97,17 +100,19 @@ class sensor(QObject):
 class fillBox(QObject):
 	doneFillSignal = pyqtSignal()
 
-	def __init__(self, valve):
+	def __init__(self, value, valve):
 		super(fillBox, self).__init__()
 		self.valve = valve
+		self.value = value
 		self.rate = 30
 		self.chamberVolume = 2.5 * 1000  # L in cubic centimeters
 
+
 	def conc2Time(self, value):
-		return 2 * value * self.chamberVolume / 10e6
+		return 2 * self.value * self.chamberVolume / 10e6
 
 	def fill(self, value):
-		self.time = self.conc2Time(value)
+		self.time = self.conc2Time(self.value)
 		self.valve.enable()
 		time.sleep(self.time)
 		self.valve.disable()
@@ -167,12 +172,14 @@ class mainWindow(QWidget):
 
 		self.fillBox_v1 = fillBox(self.v1)
 		self.fillBox_v2 = fillBox(self.v2)
+
 		self.G1Thread = QThread()
 		self.G2Thread = QThread()
 		self.fillBox_v1.moveToThread(self.G1Thread)
 		self.fillBox_v2.moveToThread(self.G2Thread)
 		self.fillBox_v1.doneFillSignal.connect(self.fill_g1)
 		self.fillBox_v2.doneFillSignal.connect(self.fill_g2)
+
 
 	def loadButtons(self):
 		self.b1 = button("Fill")
@@ -251,6 +258,8 @@ def main():
     window = mainWindow()
     window.show()
     sys.exit(app.exec_())
+	GPIO.cleanup()
+
 
 
 if __name__ == "__main__":
