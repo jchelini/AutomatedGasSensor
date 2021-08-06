@@ -12,6 +12,7 @@ from PyQt5.QtCore import *
 import pyqtgraph as pg
 
 import RPi.GPIO as GPIO
+import Adafruit_ADS1x15 as adc
 
 app = QApplication(sys.argv)
 GPIO.setmode(GPIO.BOARD)
