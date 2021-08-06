@@ -70,7 +70,7 @@ class sensor(QObject):
 		self.signalArray = [0 for _ in range(200)]
 		self.timer = QTimer()
 		self.timer.timeout.connect(lambda: self.updateTest())
-		self.loadADCSettings()
+		#self.loadADCSettings()
 		self.counter = 0
 		self.timer.start(1)
 
@@ -120,7 +120,7 @@ class mainWindow(QWidget):
 		self.loadWindowSettings()
 		self.loadGraphSettings()
 		self.loadComponents()
-		self.loadThreads()
+		self.loadThread()
 		self.loadButtons()
 		self.loadUI()
 
@@ -147,10 +147,10 @@ class mainWindow(QWidget):
 
 	def loadComponents(self):
 		# self.adc = adc.ADS1115(0x48)
-		self.v1 = valve(1)  #G1
-		self.v2 = valve(2)  #G2
-		self.v3 = valve(3)  #AIR
-		self.v4 = valve(4)  #EXHAUST
+		self.v1 = valve(16)  #G1
+		self.v2 = valve(18)  #G2
+		self.v3 = valve(22)  #AIR
+		self.v4 = valve(24)  #EXHAUST
 
 	def loadThread(self):
 		self.sensor1Thread = QThread()
