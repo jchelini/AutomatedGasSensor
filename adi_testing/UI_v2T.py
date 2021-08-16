@@ -124,7 +124,7 @@ class fillBox(QObject):
 		:return:
 		'''
 
-		return 60 * value * self.chamberVolume / (10e5 * self.rate)
+		return 60 * value * self.chamberVolume / (10e3 * self.rate)
 
 	def fill(self, value):
 		self.time = self.conc2Time(value)
