@@ -68,8 +68,6 @@ class sensor(QObject):
 		self.channel = channel
 		self.GAIN = 2 / 3
 
-		self.sensor
-
 		self.signalArray = [0 for _ in range(200)]
 		self.timer = QTimer()
 		self.timer.timeout.connect(lambda: self.update())
@@ -96,7 +94,7 @@ class sensor(QObject):
 		self.mainSignal.emit(self.signalArray)
 
 	def sVal2PPM(self):
-		return ((self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144) * 100
+		return ((self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144) #  * 100
 
 	def startSensor(self):
 		if not self.timer.isActive():
