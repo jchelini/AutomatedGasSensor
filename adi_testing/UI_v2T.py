@@ -265,7 +265,7 @@ class mainWindow(QWidget):
 
 	@pyqtSlot()
 	def fill_g2(self):
-		print("Done Filling G2")
+		print("Done Filling G2\n")
 
 	def stop(self):
 		self.v1.disable()
