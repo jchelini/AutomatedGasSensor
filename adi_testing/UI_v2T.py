@@ -68,6 +68,8 @@ class sensor(QObject):
 		self.channel = channel
 		self.GAIN = 2 / 3
 
+		self.sensor
+
 		self.signalArray = [0 for _ in range(200)]
 		self.timer = QTimer()
 		self.timer.timeout.connect(lambda: self.update())
@@ -87,10 +89,14 @@ class sensor(QObject):
 	def update(self):
 		self.signalArray = self.signalArray[1:]
 		#try:
-		self.signalArray.append(round(((self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144), 3))
+		#self.signalArray.append(round(((self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144), 3))
+		self.signalArray.append(self.sVal2PPM())
 		#self.signalArray.append(self.signalArray[-1])
 
 		self.mainSignal.emit(self.signalArray)
+
+	def sVal2PPM(self):
+		return ((self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144) * 100
 
 	def startSensor(self):
 		if not self.timer.isActive():
@@ -108,11 +114,20 @@ class fillBox(QObject):
 		super(fillBox, self).__init__()
 		self.valve = valve
 		self.rate = 30
-		self.chamberVolume = 2.5 * 1000  # L in cubic centimeters
+		self.chamberVolume = 6.79423 * 1000  # L in cubic centimeters
 
 
 	def conc2Time(self, value):
-		return 2 * value * self.chamberVolume / 10e6
+		'''
+		THIS FUNCTION FOLLOWS THE FOLLOWING CALCULATION:
+		60 (s/min) * desired value (ppm) * chamber volume (L *1000) (cc) / (flow rate (cc/min) * 10e5 (ppm/cc))
+
+
+		:param value:
+		:return:
+		'''
+
+		return 60 / self.rate * value * self.chamberVolume / 10e6
 
 	def fill(self, value):
 		self.time = self.conc2Time(value)
@@ -156,10 +171,10 @@ class mainWindow(QWidget):
 
 	def loadComponents(self):
 		self.adc = adc.ADS1115(0x48)
-		self.v1 = valve(16)  #G1
-		self.v2 = valve(18)  #G2
-		self.v3 = valve(22)  #AIR
-		self.v4 = valve(24)  #EXHAUST
+		self.v1 = valve(18)  #G1
+		self.v2 = valve(22)  #G2
+		self.v3 = valve(24)  #AIR
+		self.v4 = valve(16)  #EXHAUST
 
 	def loadThread(self):
 		self.sensor1Thread = QThread()
@@ -210,12 +225,9 @@ class mainWindow(QWidget):
 		self.g2box = csSpinBox()
 
 		self.g1L = QLabel("GAS 1")
-		#self.g1L.setText("GAS 1")
+		self.g2L = QLabel("GAS 2")
 
-		self.g2L = QLabel()
-		self.g2L.setText("GAS 2")
-
-		#self.g1Conc = QLabel()
+		self.g1Conc = QLabel("")
 
 
 	def loadUI(self):
