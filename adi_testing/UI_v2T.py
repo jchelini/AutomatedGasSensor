@@ -114,7 +114,6 @@ class fillBox(QObject):
 		self.rate = 30
 		self.chamberVolume = 6.79423 * 10  # L in cubic centimeters
 
-
 	def conc2Time(self, value):
 		'''
 		THIS FUNCTION FOLLOWS THE FOLLOWING CALCULATION:
@@ -125,7 +124,7 @@ class fillBox(QObject):
 		:return:
 		'''
 
-		return 60 / self.rate * value * self.chamberVolume / 10e5
+		return 60 * value * self.chamberVolume / (10e5 * self.rate)
 
 	def fill(self, value):
 		self.time = self.conc2Time(value)
