@@ -275,6 +275,14 @@ class mainWindow(QWidget):
 
 	def vent(self):
 		self.v3.enable()
+		self.v4.enable()
+		print("Starting Venting")
+		QTimer.singleShot(100, lambda: self.ventOff())
+
+	def ventOff(self):
+		self.v3.disable()
+		self.v4.disable()
+		print("Venting Done")
 
 
 def main():
