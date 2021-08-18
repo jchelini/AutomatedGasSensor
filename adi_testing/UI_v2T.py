@@ -183,8 +183,8 @@ class mainWindow(QWidget):
 		self.sensor2Label = QLabel()
 		self.sensor1Label.setText("Sensor 1 Average: \n{}".format(self.sensor1Array))
 		self.sensor2Label.setText("Sensor 2 Average: \n{}".format(np.mean(self.sensor2Array)))
-		self.sensor1Label.setFrameStyle(QFrame.Panel | QFrame.Sunken)
-		self.sensor2Label.setFrameStyle(QFrame.Panel | QFrame.Sunken)
+		self.sensor1Label.setFrameStyle(QFrame.Sunken)
+		self.sensor2Label.setFrameStyle(QFrame.Sunken)
 
 	def loadComponents(self):
 		self.adc = adc.ADS1115(0x48)
