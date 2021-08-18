@@ -265,8 +265,8 @@ class mainWindow(QWidget):
 		self.layout.addWidget(self.b6, 5, 4, 1, 1)
 		self.layout.addWidget(self.b7, 5, 5, 1, 1)
 		self.layout.addWidget(self.b8, 4, 2, 1, 1)
-		self.layout.addWidget(self.sensor1Label, 1, 4, 1, 1)
-		self.layout.addWidget(self.sensor2Label, 2, 4, 1, 1)
+		# self.layout.addWidget(self.sensor1Label, 1, 4, 1, 1)
+		# self.layout.addWidget(self.sensor2Label, 2, 4, 1, 1)
 
 		self.setLayout(self.layout)
 
