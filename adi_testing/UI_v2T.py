@@ -156,8 +156,8 @@ class mainWindow(QWidget):
 		self.loadUI()
 
 	def loadWindowSettings(self):
-		self.width = 700
-		self.height = 520
+		self.width = 800
+		self.height = 600
 		self.bg_color = '#e3e1dc'
 		self.setStyleSheet('background-color: {}'.format(self.bg_color))
 		self.setGeometry(0, 0, self.width, self.height)
