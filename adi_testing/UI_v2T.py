@@ -251,7 +251,7 @@ class mainWindow(QWidget):
 		self.layout.addWidget(self.graph, 0, 0, 3, 3)
 		self.layout.addWidget(self.g1L, 3, 0, 1, 1)
 		self.layout.addWidget(self.g2L, 3, 1, 1, 1)
-		self.layout.addWidget(self.sensor1Label, 3, 2, 1, 1)
+		self.layout.addWidget(self.sensor1Label, 2, 3, 1, 1)
 		self.layout.addWidget(self.sensor2Label, 3, 3, 1, 1)
 		self.layout.addWidget(self.g1box, 4, 0, 1, 1)
 		self.layout.addWidget(self.g2box, 4, 1, 1, 1)
