@@ -104,6 +104,13 @@ class sensor(QObject):
 		if self.timer.isActive():
 			self.timer.stop()
 
+	def getAvg(self, val):
+		self.val = 0
+		for i in range(val):
+			self.val += self.sVal2PPM()
+
+		return self.val/val
+
 
 class fillBox(QObject):
 	doneFillSignal = pyqtSignal()
@@ -128,7 +135,7 @@ class fillBox(QObject):
 
 	def fill(self, value):
 		self.time = self.conc2Time(value)
-		print(self.time)
+		print("\n{}".format(self.time))
 		self.valve.enable()
 		QTimer.singleShot(self.time*1000, lambda: self.endFill())
 
@@ -145,6 +152,7 @@ class mainWindow(QWidget):
 		self.loadComponents()
 		self.loadThread()
 		self.loadButtons()
+		self.setBaseline()
 		self.loadUI()
 
 	def loadWindowSettings(self):
@@ -161,10 +169,13 @@ class mainWindow(QWidget):
 		self.timeArray = list(range(200))
 		self.sensor1Array = [0 for _ in range(200)]
 		self.sensor2Array = [0 for _ in range(200)]
+		self.baselineArray = [0 for _ in range(200)]
 
 		self.chicken = pg.mkPen(color=(47, 209, 214), width=2)
+		self.redPanda = pg.mkPen(color=(127, 83, 181), width=2, style=QtCore.Qt.DotLine)
 		self.sensor1Plot = self.graph.plot(self.timeArray, self.sensor1Array, pen=self.chicken)
 		self.sensor2Plot = self.graph.plot(self.timeArray, self.sensor2Array, pen='r')
+		self.baselinePlot = self.graph.plot(self.timeArray, self.baselineArray, pen=self.redPanda)
 
 		self.graph.setYRange(0, 5)
 
@@ -207,6 +218,7 @@ class mainWindow(QWidget):
 		self.b5 = button("Gas 2")
 		self.b6 = button("Air")
 		self.b7 = button("Exhaust")
+		self.b8 = button("Set Baseline")
 
 		self.b1.clicked.connect(lambda: self.fill())
 		self.b2.clicked.connect(lambda: self.vent())
@@ -219,6 +231,7 @@ class mainWindow(QWidget):
 		self.b6.released.connect(lambda: self.v3.disable())
 		self.b7.pressed.connect(lambda: self.v4.enable())
 		self.b7.released.connect(lambda: self.v4.disable())
+		self.b8.clicked.connect(lambda: self.setBaseline())
 
 		self.g1box = csSpinBox()
 		self.g2box = csSpinBox()
@@ -244,6 +257,7 @@ class mainWindow(QWidget):
 		self.layout.addWidget(self.b5, 4, 5, 1, 1)
 		self.layout.addWidget(self.b6, 5, 4, 1, 1)
 		self.layout.addWidget(self.b7, 5, 5, 1, 1)
+		self.layout.addWidget(self.b8, 4, 2, 1, 1)
 
 		self.setLayout(self.layout)
 
@@ -254,6 +268,11 @@ class mainWindow(QWidget):
 	@pyqtSlot(object)
 	def update2(self, sensArray):
 		self.sensor2Plot.setData(self.timeArray, sensArray)
+
+	def setBaseline(self):
+		self.mergedVal = (self.sensor1.getAvg() + self.sensor2.getAvg())/2
+		self.baselineArray = [self.mergedVal for _ in range(200)]
+		self.baselinePlot.setData(self.timeArray, self.baselineArray)
 
 	def fill(self):
 		self.g1Val = self.g1box.value()
@@ -267,7 +286,7 @@ class mainWindow(QWidget):
 
 	@pyqtSlot()
 	def fill_g2(self):
-		print("Done Filling G2\n")
+		print("Done Filling G2")
 
 	def stop(self):
 		self.v1.disable()
