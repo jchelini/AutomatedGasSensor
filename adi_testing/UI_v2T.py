@@ -181,8 +181,8 @@ class mainWindow(QWidget):
 
 		self.sensor1Label = QLabel()
 		self.sensor2Label = QLabel()
-		self.sensor1Label.setText("Sensor 1 Average: {}".format(self.sensor1Array))
-		self.sensor2Label.setText("Sensor 2 Average: {}".format(np.mean(self.sensor2Array)))
+		# self.sensor1Label.setText("Sensor 1 Average: {}".format(self.sensor1Array))
+		# self.sensor2Label.setText("Sensor 2 Average: {}".format(np.mean(self.sensor2Array)))
 
 
 	def loadComponents(self):
@@ -245,17 +245,14 @@ class mainWindow(QWidget):
 		self.g1L = QLabel("GAS 1")
 		self.g2L = QLabel("GAS 2")
 
-		self.g1Conc = QLabel("")
-
-
 	def loadUI(self):
 		self.layout = QGridLayout()
 
 		self.layout.addWidget(self.graph, 0, 0, 3, 3)
 		self.layout.addWidget(self.g1L, 3, 0, 1, 1)
 		self.layout.addWidget(self.g2L, 3, 1, 1, 1)
-		# self.layout.addWidget(self.sensor1Label, 3, 2, 1, 1)
-		# self.layout.addWidget(self.sensor2Label, 3, 3, 1, 1)
+		self.layout.addWidget(self.sensor1Label, 3, 2, 1, 1)
+		self.layout.addWidget(self.sensor2Label, 3, 3, 1, 1)
 		self.layout.addWidget(self.g1box, 4, 0, 1, 1)
 		self.layout.addWidget(self.g2box, 4, 1, 1, 1)
 		self.layout.addWidget(self.b1, 5, 0, 1, 1)
