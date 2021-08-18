@@ -130,7 +130,9 @@ class fillBox(QObject):
 		self.time = self.conc2Time(value)
 		print(self.time)
 		self.valve.enable()
-		time.sleep(self.time)
+		QTimer.singleshot(self.time*1000, lambda: self.endFill())
+
+	def endFill(self):
 		self.valve.disable()
 		self.doneFillSignal.emit()
 
