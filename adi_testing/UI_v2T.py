@@ -266,20 +266,20 @@ class mainWindow(QWidget):
 		self.layout.addWidget(self.b7, 5, 5, 1, 1)
 		self.layout.addWidget(self.b8, 4, 2, 1, 1)
 		self.layout.addWidget(self.sensor1Label, 1, 4, 1, 1)
-		self.layout.addWidget(self.sensor1Label, 2, 4, 1, 1)
+		self.layout.addWidget(self.sensor2Label, 2, 4, 1, 1)
 
 		self.setLayout(self.layout)
 
 	@pyqtSlot(object)
 	def update(self, sensArray):
 		self.sensor1Plot.setData(self.timeArray, sensArray)
-		self.sensor1Label.setText("Sensor 1 Average: \n{}".format(np.mean(sensArray)))
+		self.sensor1Label.setText("Sensor 1 Average: \n{:.3f}".format(np.mean(sensArray)))
 
 
 	@pyqtSlot(object)
 	def update2(self, sensArray):
 		self.sensor2Plot.setData(self.timeArray, sensArray)
-		self.sensor2Label.setText("Sensor 2 Average: \n{}".format(np.mean(sensArray)))
+		self.sensor2Label.setText("Sensor 2 Average: \n{:.3f}".format(np.mean(sensArray)))
 
 	def setBaseline(self):
 		self.mergedVal = (self.sensor1.getAvg(5) + self.sensor2.getAvg(5))/2
