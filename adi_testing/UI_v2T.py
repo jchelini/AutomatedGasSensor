@@ -179,6 +179,13 @@ class mainWindow(QWidget):
 
 		self.graph.setYRange(0, 5)
 
+		self.sensor1Label = QLabel()
+		self.sensor2Label = QLabel()
+		self.sensor1Label.setText("Sensor 1 Average: \n{}".format(self.sensor1Array))
+		self.sensor2Label.setText("Sensor 2 Average: \n{}".format(np.mean(self.sensor2Array)))
+		self.sensor1Label.setFrameStyle(QFrame.Panel | QFrame.Sunken)
+		self.sensor2Label.setFrameStyle(QFrame.Panel | QFrame.Sunken)
+
 	def loadComponents(self):
 		self.adc = adc.ADS1115(0x48)
 		self.v1 = valve(18)  #G1
@@ -258,16 +265,21 @@ class mainWindow(QWidget):
 		self.layout.addWidget(self.b6, 5, 4, 1, 1)
 		self.layout.addWidget(self.b7, 5, 5, 1, 1)
 		self.layout.addWidget(self.b8, 4, 2, 1, 1)
+		self.layout.addWidget(self.sensor1Label, 1, 4, 1, 1)
+		self.layout.addWidget(self.sensor1Label, 2, 4, 1, 1)
 
 		self.setLayout(self.layout)
 
 	@pyqtSlot(object)
 	def update(self, sensArray):
 		self.sensor1Plot.setData(self.timeArray, sensArray)
+		self.sensor1Label.setText("Sensor 1 Average: \n{}".format(np.mean(sensArray)))
+
 
 	@pyqtSlot(object)
 	def update2(self, sensArray):
 		self.sensor2Plot.setData(self.timeArray, sensArray)
+		self.sensor2Label.setText("Sensor 2 Average: \n{}".format(np.mean(sensArray)))
 
 	def setBaseline(self):
 		self.mergedVal = (self.sensor1.getAvg(5) + self.sensor2.getAvg(5))/2
