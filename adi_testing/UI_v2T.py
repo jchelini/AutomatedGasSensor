@@ -270,7 +270,7 @@ class mainWindow(QWidget):
 		self.sensor2Plot.setData(self.timeArray, sensArray)
 
 	def setBaseline(self):
-		self.mergedVal = (self.sensor1.getAvg() + self.sensor2.getAvg())/2
+		self.mergedVal = (self.sensor1.getAvg(5) + self.sensor2.getAvg(5))/2
 		self.baselineArray = [self.mergedVal for _ in range(200)]
 		self.baselinePlot.setData(self.timeArray, self.baselineArray)
 
