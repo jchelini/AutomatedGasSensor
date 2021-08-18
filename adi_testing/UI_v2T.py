@@ -111,7 +111,7 @@ class fillBox(QObject):
 	def __init__(self, valve):
 		super(fillBox, self).__init__()
 		self.valve = valve
-		self.rate = 30
+		self.rate = 5
 		self.chamberVolume = 6.79423 * 10  # L in cubic centimeters
 
 	def conc2Time(self, value):
@@ -277,7 +277,7 @@ class mainWindow(QWidget):
 		self.v3.enable()
 		self.v4.enable()
 		print("Starting Venting")
-		QTimer.singleShot(10000, lambda: self.ventOff())
+		QTimer.singleShot(100000, lambda: self.ventOff())
 
 	def ventOff(self):
 		self.v3.disable()
