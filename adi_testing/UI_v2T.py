@@ -187,8 +187,8 @@ class mainWindow(QWidget):
 
 	def loadComponents(self):
 		self.adc = adc.ADS1115(0x48)
-		self.v1 = valve(18)  #G1
-		self.v2 = valve(22)  #G2
+		self.v1 = valve(18)  #G1 (methanol)
+		self.v2 = valve(22)  #G2 (ethane)
 		self.v3 = valve(24)  #AIR
 		self.v4 = valve(16)  #EXHAUST
 
@@ -220,8 +220,8 @@ class mainWindow(QWidget):
 		self.b1 = button("Fill")
 		self.b2 = button("Vent")
 		self.b3 = button ("Stop")
-		self.b4 = button("Gas 1")
-		self.b5 = button("Gas 2")
+		self.b4 = button("Gas 1 (m)")
+		self.b5 = button("Gas 2 (e)")
 		self.b6 = button("Air")
 		self.b7 = button("Exhaust")
 		self.b8 = button("Set Baseline")
@@ -242,8 +242,8 @@ class mainWindow(QWidget):
 		self.g1box = csSpinBox()
 		self.g2box = csSpinBox()
 
-		self.g1L = QLabel("GAS 1")
-		self.g2L = QLabel("GAS 2")
+		self.g1L = QLabel("GAS 1 (m)")
+		self.g2L = QLabel("GAS 2 (e)")
 
 	def loadUI(self):
 		self.layout = QGridLayout()
