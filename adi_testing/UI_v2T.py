@@ -57,7 +57,7 @@ class graph(pg.PlotWidget):
 		self.setStyleSheet("pg.PlotWidget {border-style: outset; max-height: 50}")
 
 
-class sensor(QObject):
+class sensor(QThread):
 	mainSignal = pyqtSignal(object)
 
 	def __init__(self, shift=None, adc=None, channel=None):
@@ -73,16 +73,7 @@ class sensor(QObject):
 		self.timer.timeout.connect(lambda: self.update())
 		#self.loadADCSettings()
 		self.counter = 0
-		self.timer.start(1)
-
-	# def updateTest(self):
-	# 	self.signalArray = self.signalArray[1:]
-	# 	try:
-	# 		self.signalArray.append(math.sin(self.counter + self.shift))
-	# 	except:
-	# 		self.signalArray.append(self.signalArray[-1])
-	# 	self.mainSignal.emit(self.signalArray)
-	# 	self.counter += 0.01
+		self.timer.start(10)
 
 	def update(self):
 		self.signalArray = self.signalArray[1:]
@@ -98,7 +89,7 @@ class sensor(QObject):
 
 	def startSensor(self):
 		if not self.timer.isActive():
-			self.timer.start(100)
+			self.timer.start(10)
 
 	def stopSensor(self):
 		if self.timer.isActive():
@@ -112,14 +103,14 @@ class sensor(QObject):
 		return self.val/val
 
 
-class fillBox(QObject):
+class fillBox(QThread):
 	doneFillSignal = pyqtSignal()
 
 	def __init__(self, valve):
 		super(fillBox, self).__init__()
 		self.valve = valve
 		self.rate = 5
-		self.chamberVolume = 6.79423 * 10  # L in cubic centimeters
+		self.chamberVolume = 6.79423 * 1000  # L in cubic centimeters
 
 	def conc2Time(self, value):
 		'''
@@ -131,11 +122,11 @@ class fillBox(QObject):
 		:return:
 		'''
 
-		return 60 * value * self.chamberVolume / (10e3 * self.rate)
+		return 60 * value * self.chamberVolume / (10e5 * self.rate)
 
 	def fill(self, value):
 		self.time = self.conc2Time(value)
-		print("\n{}".format(self.time))
+		print("\n{} sec".format(self.time))
 		self.valve.enable()
 		QTimer.singleShot(self.time*1000, lambda: self.endFill())
 
@@ -181,9 +172,6 @@ class mainWindow(QWidget):
 
 		self.sensor1Label = QLabel()
 		self.sensor2Label = QLabel()
-		# self.sensor1Label.setText("Sensor 1 Average: {}".format(self.sensor1Array))
-		# self.sensor2Label.setText("Sensor 2 Average: {}".format(np.mean(self.sensor2Array)))
-
 
 	def loadComponents(self):
 		self.adc = adc.ADS1115(0x48)
