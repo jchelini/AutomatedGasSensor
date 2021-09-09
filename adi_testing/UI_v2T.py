@@ -110,7 +110,7 @@ class fillBox(QThread):
 		super(fillBox, self).__init__()
 		self.valve = valve
 		self.rate = 5
-		self.chamberVolume = 6.79423 * 10  # L in cubic centimeters
+		self.chamberVolume = 6.79423 * 1000  # L in cubic centimeters
 
 	def conc2Time(self, value):
 		'''
@@ -122,11 +122,11 @@ class fillBox(QThread):
 		:return:
 		'''
 
-		return 60 * value * self.chamberVolume / (10e3 * self.rate)
+		return 60 * value * self.chamberVolume / (10e5 * self.rate)
 
 	def fill(self, value):
 		self.time = self.conc2Time(value)
-		print("\n{}".format(self.time))
+		print("\n{} sec".format(self.time))
 		self.valve.enable()
 		QTimer.singleShot(self.time*1000, lambda: self.endFill())
 
