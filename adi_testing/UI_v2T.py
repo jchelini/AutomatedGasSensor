@@ -227,7 +227,7 @@ class mainWindow(QWidget):
 		self.b7.released.connect(lambda: self.v4.disable())
 		self.b8.clicked.connect(lambda: self.setBaseline())
 
-		self.g1box = csSpinBox()
+		self.g1box = csSpinBox(max=3000)
 		self.g2box = csSpinBox()
 
 		self.g1L = QLabel("GAS 1 (m)")
