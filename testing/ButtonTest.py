@@ -1,5 +1,5 @@
 import Adafruit_ADS1x15 as adc
-#are you working
+#are you working b
 def main():
 
     channel = 0
