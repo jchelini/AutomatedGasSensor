@@ -15,6 +15,10 @@ def main():
     else:
         print("button is pushed")
 
+    relay = QwiicRelay(0x18)
+    relay.set_relay_off()
+
+
 if __name__ == "__main__":
     main()
 
