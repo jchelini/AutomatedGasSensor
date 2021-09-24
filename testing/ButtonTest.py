@@ -11,9 +11,9 @@ def main():
     channel = ai(adc1, adc.P0)
     print(channel.value)
     if channel.value < 150:
-        print("button is pushed")
-    else:
         print("button is not pushed")
+    else:
+        print("button is pushed")
 
 if __name__ == "__main__":
     main()
