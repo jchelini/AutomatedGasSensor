@@ -175,9 +175,9 @@ class mainWindow(QWidget):
 
 	def loadComponents(self):
 		self.adc = adc.ADS1115(0x48)
-		self.v1 = valve(18)  #G1 (methanol)
+		self.v1 = valve(24)  #G1 (methanol)
 		self.v2 = valve(22)  #G2 (ethane)
-		self.v3 = valve(24)  #AIR
+		self.v3 = valve(18)  #AIR
 		self.v4 = valve(16)  #EXHAUST
 
 	def loadThread(self):
