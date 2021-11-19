@@ -190,8 +190,8 @@ class mainWindow(QWidget):
 		self.LEDButton1 = LEDButton(adc2=self.adc2,channel= 0)
 		self.LEDButton2 = LEDButton(adc2=self.adc2,channel= 1)
 
-		print(adc2.read_adc(channel=0, gain=1))
-		if channel < 15000:
+		print(self.adc2.read_adc(channel=0, gain=1))
+		if self.channel < 15000:
 			print("Red button is not pushed")
 		else:
 			print("Red button is pushed")
