@@ -5,7 +5,7 @@ import math
 import time
 import board
 import busio
-#why please please
+#why please please jhj
 
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import *
