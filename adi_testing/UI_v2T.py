@@ -3,6 +3,9 @@ import os
 import sys
 import math
 import time
+import board
+import busio
+
 
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import *
@@ -13,6 +16,9 @@ import pyqtgraph as pg
 
 import RPi.GPIO as GPIO
 import Adafruit_ADS1x15 as adc
+
+i2c = busio.I2C(board.SCL, board.SDA)
+
 
 app = QApplication(sys.argv)
 GPIO.setmode(GPIO.BOARD)
@@ -60,11 +66,11 @@ class graph(pg.PlotWidget):
 class sensor(QThread):
 	mainSignal = pyqtSignal(object)
 
-	def __init__(self, shift=None, adc=None, channel=None):
+	def __init__(self, shift=None, adc1=None, channel=None):
 		super(sensor, self).__init__()
 		self.shift = shift
 
-		self.adc = adc
+		self.adc1 = adc1
 		self.channel = channel
 		self.GAIN = 2 / 3
 
@@ -78,14 +84,15 @@ class sensor(QThread):
 	def update(self):
 		self.signalArray = self.signalArray[1:]
 		#try:
-		#self.signalArray.append(round(((self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144), 3))
+		#self.signalArray.append(round(((self.adc1.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144), 3))
 		self.signalArray.append(self.sVal2PPM())
 		#self.signalArray.append(self.signalArray[-1])
 
 		self.mainSignal.emit(self.signalArray)
 
 	def sVal2PPM(self):
-		return ((self.adc.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144) #  * 100
+		return ((self.adc1.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144) #  * 100
+		return ((self.adc1.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144) #  * 100
 
 	def startSensor(self):
 		if not self.timer.isActive():
@@ -174,21 +181,30 @@ class mainWindow(QWidget):
 		self.sensor2Label = QLabel()
 
 	def loadComponents(self):
-		self.adc = adc.ADS1115(0x48)
+		self.adc1 = adc.ADS1115(0x48)
+		self.adc2 = adc.ADS1115(0x49)
 		self.v1 = valve(24)  #G1 (methanol)
 		self.v2 = valve(22)  #G2 (ethane)
 		self.v3 = valve(18)  #AIR
 		self.v4 = valve(16)  #EXHAUST
+		self.LEDButton1 = LEDButton(adc2=self.adc2,channel= 0)
+		self.LEDButton2 = LEDButton(adc2=self.adc2,channel= 1)
+
+		print(adc2.read_adc(channel=0, gain=1))
+		if channel < 15000:
+			print("Red button is not pushed")
+		else:
+			print("Red button is pushed")
 
 	def loadThread(self):
 		self.sensor1Thread = QThread()
-		self.sensor1 = sensor(adc=self.adc, channel=0)
+		self.sensor1 = sensor(adc1=self.adc1, channel=0)
 		self.sensor1.moveToThread(self.sensor1Thread)
 		self.sensor1.mainSignal.connect(self.update)
 		self.sensor1Thread.start()
 
 		self.sensor2Thread = QThread()
-		self.sensor2 = sensor(adc=self.adc, channel=1)
+		self.sensor2 = sensor(adc1=self.adc1, channel=1)
 		self.sensor2.moveToThread(self.sensor1Thread)
 		self.sensor2.mainSignal.connect(self.update2)
 		self.sensor2Thread.start()
@@ -302,6 +318,15 @@ class mainWindow(QWidget):
 		self.v4.disable()
 		print("Venting Done")
 
+class LEDButton:
+
+	def __init__(self, shift=None, adc2=None, channel=None):
+		super(LEDButton, self).__init__()
+		self.shift = shift
+
+		self.adc2 = adc2
+		self.channel = channel
+		self.gain = 1
 
 def main():
 	window = mainWindow()
