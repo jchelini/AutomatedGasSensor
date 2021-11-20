@@ -3,7 +3,7 @@ import os
 import sys
 import math
 import time
-import board
+#import board
 import busio
 #why please please please
 
@@ -17,7 +17,7 @@ import pyqtgraph as pg
 import RPi.GPIO as GPIO
 import Adafruit_ADS1x15 as adc
 
-i2c = busio.I2C(board.SCL, board.SDA)
+#i2c = busio.I2C(board.SCL, board.SDA)
 
 
 app = QApplication(sys.argv)
