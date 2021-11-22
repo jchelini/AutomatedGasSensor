@@ -128,18 +128,9 @@ class LEDButton(QThread):
 		self.currentVal = self.readButton()
 		print("this is val ", self.currentVal)
 		if self.currentVal > 2:
-			self.toggleButton()
+			self.buttonState = True
 			self.mainSignal.emit(self.buttonState)
 
-
-	def toggleButton(self):
-		print("yo yoo")
-		if self.buttonState:
-			print("true")
-			self.buttonState = False
-		else:
-			print("false")
-			self.buttonState = True
 
 	def readButton(self):
 		return ((self.adc2.read_adc(self.channel, gain=self.gain) / pow(2, 15)) * 6.144)
