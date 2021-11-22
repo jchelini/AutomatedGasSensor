@@ -325,6 +325,9 @@ class mainWindow(QWidget):
 	def b1function(self, status):
 		if status:
 			print("white button is activated")
+			self.v1.enable()
+			time.sleep(3)
+			self.v1.disable()
 
 		else:
 			print("white button is deactivated")
