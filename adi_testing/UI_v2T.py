@@ -129,7 +129,7 @@ class LEDButton(QThread):
 		print("this is val ", self.currentVal)
 		if self.currentVal > 2:
 			self.buttonState = True
-			self.mainSignal.emit(True)
+			self.mainSignal.emit(self.buttonState)
 
 
 	def readButton(self):
