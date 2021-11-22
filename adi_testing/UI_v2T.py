@@ -90,8 +90,8 @@ class sensor(QThread):
 		self.mainSignal.emit(self.signalArray)
 
 	def sVal2PPM(self):
-		return ((self.adc1.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144) #  * 100
-		return ((self.adc1.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144) #  * 100
+		return ((self.adc1.read_adc(self.channel, gain=self.gain) / pow(2, 15)) * 6.144) #  * 100
+		return ((self.adc1.read_adc(self.channel, gain=self.gain) / pow(2, 15)) * 6.144) #  * 100
 
 	def startSensor(self):
 		if not self.timer.isActive():
