@@ -122,7 +122,7 @@ class LEDButton(QThread):
 		self.timer.timeout.connect(lambda: self.update())
 		self.timer.start(10)
 
-		self. buttonState = False
+		self.buttonState = False
 
 	def update(self):
 		self.currentVal = self.readButton()
