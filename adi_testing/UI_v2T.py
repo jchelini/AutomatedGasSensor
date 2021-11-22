@@ -133,9 +133,12 @@ class LEDButton(QThread):
 
 
 	def toggleButton(self):
+		print("yo yoo")
 		if self.buttonState:
+			print("true")
 			self.buttonState = False
 		else:
+			print("false")
 			self.buttonState = True
 
 	def readButton(self):
