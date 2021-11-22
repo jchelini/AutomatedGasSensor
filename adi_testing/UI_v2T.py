@@ -325,6 +325,7 @@ class mainWindow(QWidget):
 	def b1function(self, status):
 		if status:
 			print("white button is activated")
+
 		else:
 			print("white button is deactivated")
 
@@ -332,6 +333,10 @@ class mainWindow(QWidget):
 	def b2function(self, status):
 		if status:
 			print("Red button is activated")
+			self.v1.enable()
+			time.sleep(3)
+			self.v1.disable()
+
 		else:
 			print("Red button is deactivated")
 
