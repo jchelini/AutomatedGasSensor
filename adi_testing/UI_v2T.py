@@ -191,18 +191,19 @@ class mainWindow(QWidget):
 		self.LEDButton2 = LEDButton(adc2=self.adc2,channel= 1)
 
 		print(self.adc2.read_adc(channel=0, gain=1))
-		if self.adc2.read_adc(channel=0, gain=1) < 15000:
-			print("White button is not pushed")
-		else:
+		if self.adc2.read_adc(channel=0, gain=1) > 15000:
 			print("White button is pushed")
-			# self.v1.enable()
+			self.v1.enable()
 			# time.sleep(7)
 			# self.v1.disable()
-
-		while self.adc2.read_adc(channel=0, gain=1) < 15000:
-			self.v1.enable()
 		else:
+			print("White button is not pushed")
 			self.v1.disable()
+
+		# while self.adc2.read_adc(channel=0, gain=1) < 15000:
+		# 	self.v1.enable()
+		# else:
+		# 	self.v1.disable()
 
 		print(self.adc2.read_adc(channel=1, gain=1))
 		if self.adc2.read_adc(channel=1, gain=1) < 15000:
