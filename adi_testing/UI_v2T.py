@@ -127,6 +127,7 @@ class LEDButton(QThread):
 	def update(self):
 		self.currentVal = self.readButton()
 		if self.currentVal > 2:
+			print("button is pushed")
 			self.toggleButton()
 			self.mainSignal.emit(self.buttonState)
 
