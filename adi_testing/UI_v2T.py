@@ -83,8 +83,7 @@ class sensor(QThread):
 
 	def update(self):
 		self.signalArray = self.signalArray[1:]
-		#try:
-		#self.signalArray.append(round(((self.adc1.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144), 3))
+
 		self.signalArray.append(self.sVal2PPM())
 		#self.signalArray.append(self.signalArray[-1])
 
@@ -108,6 +107,46 @@ class sensor(QThread):
 			self.val += self.sVal2PPM()
 
 		return self.val/val
+
+class LEDButton(QThread):
+	mainSignal = pyqtSignal(bool)
+	def __init__(self, shift=None, adc2=None, channel=None):
+		super(LEDButton, self).__init__()
+		self.shift = shift
+
+		self.adc2 = adc2
+		self.channel = channel
+		self.gain = 1
+
+		self.timer = QTimer()
+		self.timer.timeout.connect(lambda: self.update())
+		self.timer.start(10)
+
+		self. buttonState = False
+
+	def update(self):
+		self.currentVal = self.readButton()
+		if self.currentVal > 15000:
+			self.toggleButton()
+			self.mainSignal.emit(self.buttonState)
+
+
+	def toggleButton(self):
+		if self.buttonState:
+			self.buttonState = False
+		else:
+			self.buttonState = True
+
+	def readButton(self):
+		return ((self.adc1.read_adc(self.channel, gain=self.GAIN) / pow(2, 15)) * 6.144)
+
+	def startSensor(self):
+		if not self.timer.isActive():
+			self.timer.start(10)
+
+	def stopSensor(self):
+		if self.timer.isActive():
+			self.timer.stop()
 
 
 class fillBox(QThread):
@@ -189,27 +228,8 @@ class mainWindow(QWidget):
 		self.v4 = valve(16)  #EXHAUST
 		self.LEDButton1 = LEDButton(adc2=self.adc2,channel= 0)
 		self.LEDButton2 = LEDButton(adc2=self.adc2,channel= 1)
-
-		print(self.adc2.read_adc(channel=0, gain=1))
-		if self.adc2.read_adc(channel=0, gain=1) > 15000:
-			print("White button is pushed")
-			self.v1.enable()
-			# time.sleep(7)
-			# self.v1.disable()
-		else:
-			print("White button is not pushed")
-			self.v1.disable()
-
-		# while self.adc2.read_adc(channel=0, gain=1) < 15000:
-		# 	self.v1.enable()
-		# else:
-		# 	self.v1.disable()
-
-		print(self.adc2.read_adc(channel=1, gain=1))
-		if self.adc2.read_adc(channel=1, gain=1) < 15000:
-			print("Red button is not pushed")
-		else:
-			print("Red button is pushed")
+		self.LEDButton1.mainSignal.connect(lambda: self.b1function)
+		self.LEDButton2.mainSignal.connect(lambda: self.b2function)
 
 	def loadThread(self):
 		self.sensor1Thread = QThread()
@@ -297,6 +317,21 @@ class mainWindow(QWidget):
 		self.sensor2Plot.setData(self.timeArray, sensArray)
 		self.sensor2Label.setText("Sensor 2 Average: {:.3f}".format(np.mean(sensArray)))
 
+	@pyqtSlot(bool)
+	def b1function(self, status):
+		if status:
+			print("white button is activated")
+		else:
+			print("white button is deactivated")
+
+	@pyqtSlot(bool)
+	def b2function(self, status):
+		if status:
+			print("Red button is activated")
+		else:
+			print("Red button is deactivated")
+
+
 	def setBaseline(self):
 		self.mergedVal = (self.sensor1.getAvg(5) + self.sensor2.getAvg(5))/2
 		self.baselineArray = [self.mergedVal for _ in range(200)]
@@ -333,15 +368,7 @@ class mainWindow(QWidget):
 		self.v4.disable()
 		print("Venting Done")
 
-class LEDButton:
 
-	def __init__(self, shift=None, adc2=None, channel=None):
-		super(LEDButton, self).__init__()
-		self.shift = shift
-
-		self.adc2 = adc2
-		self.channel = channel
-		self.gain = 1
 
 def main():
 	window = mainWindow()
