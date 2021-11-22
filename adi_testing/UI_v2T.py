@@ -231,7 +231,7 @@ class mainWindow(QWidget):
 		self.LEDButton2Thread = QThread()
 		self.LEDButton2 = LEDButton(adc2=self.adc2,channel= 1)
 		self.LEDButton2.moveToThread(self.LEDButton2Thread)
-		self.LEDButton2.mainSignal.connect(lambda: self.b2function)
+		self.LEDButton2.mainSignal.connect(self.b2function)
 		self.LEDButton2Thread.start()
 
 
