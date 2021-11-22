@@ -192,6 +192,12 @@ class mainWindow(QWidget):
 
 		print(self.adc2.read_adc(channel=0, gain=1))
 		if self.adc2.read_adc(channel=0, gain=1) < 15000:
+			print("White button is not pushed")
+		else:
+			print("White button is pushed")
+
+		print(self.adc2.read_adc(channel=1, gain=1))
+		if self.adc2.read_adc(channel=1, gain=1) < 15000:
 			print("Red button is not pushed")
 		else:
 			print("Red button is pushed")
