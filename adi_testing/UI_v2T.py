@@ -195,8 +195,13 @@ class mainWindow(QWidget):
 			print("White button is not pushed")
 		else:
 			print("White button is pushed")
+			# self.v1.enable()
+			# time.sleep(7)
+			# self.v1.disable()
+
+		while self.adc2.read_adc(channel=0, gain=1) < 15000:
 			self.v1.enable()
-			time.sleep(7)
+		else:
 			self.v1.disable()
 
 		print(self.adc2.read_adc(channel=1, gain=1))
