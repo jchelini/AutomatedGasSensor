@@ -129,7 +129,7 @@ class LEDButton(QThread):
 		print("this is val ", self.currentVal)
 		if self.currentVal > 2:
 			self.buttonState = True
-			self.mainSignal.emit(self.buttonState)
+			self.mainSignal.emit(True)
 
 
 	def readButton(self):
@@ -221,11 +221,11 @@ class mainWindow(QWidget):
 		self.v2 = valve(22)  #G2 (ethane)
 		self.v3 = valve(18)  #AIR
 		self.v4 = valve(16)  #EXHAUST
-		self.LEDButton1Thread = QThread()
+		#self.LEDButton1Thread = QThread()
 		self.LEDButton1 = LEDButton(adc2=self.adc2,channel= 0)
-		self.LEDButton1.moveToThread(self.LEDButton1Thread)
+		#self.LEDButton1.moveToThread(self.LEDButton1Thread)
 		self.LEDButton1.mainSignal.connect(lambda: self.b1function)
-		self.LEDButton1Thread.start()
+		#self.LEDButton1Thread.start()
 
 		self.LEDButton2 = LEDButton(adc2=self.adc2,channel= 1)
 		self.LEDButton2.mainSignal.connect(lambda: self.b2function)
