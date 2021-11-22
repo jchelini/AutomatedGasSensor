@@ -325,9 +325,7 @@ class mainWindow(QWidget):
 	def b1function(self, status):
 		if status:
 			print("white button is activated")
-			self.v1.enable()
-			time.sleep(3)
-			self.v1.disable()
+			self.fill()
 
 		else:
 			print("white button is deactivated")
@@ -336,9 +334,8 @@ class mainWindow(QWidget):
 	def b2function(self, status):
 		if status:
 			print("Red button is activated")
-			self.v1.enable()
-			time.sleep(3)
-			self.v1.disable()
+			self.stop()
+			self.vent()
 
 		else:
 			print("Red button is deactivated")
@@ -350,6 +347,8 @@ class mainWindow(QWidget):
 		self.baselinePlot.setData(self.timeArray, self.baselineArray)
 
 	def fill(self):
+		#if LEDButton.buttonState:
+
 		self.g1Val = self.g1box.value()
 		self.g2Val = self.g2box.value()
 		self.fillBox_v1.fill(self.g1Val)
