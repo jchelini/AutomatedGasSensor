@@ -380,6 +380,7 @@ class mainWindow(QWidget):
 		self.v3.disable()
 		self.v4.disable()
 		print("Venting Done")
+		self.LEDButton2.buttonState = False
 
 
 
