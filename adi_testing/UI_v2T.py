@@ -127,7 +127,7 @@ class LEDButton(QThread):
 	def update(self):
 		self.currentVal = self.readButton()
 		#print("this is val ", self.currentVal)
-		if self.currentVal > 2:
+		if self.currentVal > 2 and self.buttonState == False:
 			self.buttonState = True
 			self.mainSignal.emit(self.buttonState)
 
@@ -358,9 +358,11 @@ class mainWindow(QWidget):
 	def fill_g1(self):
 		print("Done Filling G1")
 
+
 	@pyqtSlot()
 	def fill_g2(self):
 		print("Done Filling G2")
+		self.LEDButton1.buttonState = False
 
 	def stop(self):
 		self.v1.disable()
