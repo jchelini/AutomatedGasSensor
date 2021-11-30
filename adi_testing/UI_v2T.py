@@ -108,7 +108,7 @@ class sensor(QThread):
 
 		return self.val/val
 
-class LEDButton(QThread):
+class LEDButton(QThread,mainWindow):
 	mainSignal = pyqtSignal(bool)
 	def __init__(self, shift=None, adc2=None, channel=None):
 		super(LEDButton, self).__init__()
@@ -124,7 +124,7 @@ class LEDButton(QThread):
 
 		self.buttonState = False
 
-	def update(self):
+	def update(self,mainWindow ):
 		self.currentVal = self.readButton()
 		#print("this is val ", self.currentVal)
 		if self.currentVal > 2 and self.buttonState == False and mainWindow.LEDButton2.buttonState == False:
@@ -347,7 +347,7 @@ class mainWindow(QWidget):
 		self.baselinePlot.setData(self.timeArray, self.baselineArray)
 
 	def fill(self):
-		#if LEDButton.buttonState:
+		#if self.LEDButton2.buttonState == False:
 
 		self.g1Val = self.g1box.value()
 		self.g2Val = self.g2box.value()
