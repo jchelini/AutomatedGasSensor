@@ -127,7 +127,7 @@ class LEDButton(QThread):
 	def update(self):
 		self.currentVal = self.readButton()
 		#print("this is val ", self.currentVal)
-		if self.currentVal > 2 and self.buttonState == False:
+		if self.currentVal > 2 #and self.buttonState == False:
 			self.buttonState = True
 			self.mainSignal.emit(self.buttonState)
 
@@ -180,6 +180,8 @@ class mainWindow(QWidget):
 	def __init__(self):
 		super(mainWindow, self).__init__()
 		self.loadWindowSettings()
+		self.jStatus = 0
+
 		self.loadGraphSettings()
 		self.loadComponents()
 		self.loadThread()
@@ -323,22 +325,26 @@ class mainWindow(QWidget):
 
 	@pyqtSlot(bool)
 	def b1function(self, status):
-		if status:
-			print("white button is activated")
-			self.fill()
+		if self.jStatus == 0:
+			if status:
+				print("white button is activated")
+				self.fill()
+				self.jStatus = 1
 
-		else:
-			print("white button is deactivated")
+			else:
+				print("white button is deactivated")
 
 	@pyqtSlot(bool)
 	def b2function(self, status):
-		if status:
-			print("Red button is activated")
-			self.stop()
-			self.vent()
+		if self.jStatus == 0:
+			if status:
+				print("Red button is activated")
+				self.stop()
+				self.vent()
+				self.jStatus = 2
 
-		else:
-			print("Red button is deactivated")
+			else:
+				print("Red button is deactivated")
 
 
 	def setBaseline(self):
@@ -347,7 +353,7 @@ class mainWindow(QWidget):
 		self.baselinePlot.setData(self.timeArray, self.baselineArray)
 
 	def fill(self):
-		if self.LEDButton2.buttonState == False:
+		#if self.LEDButton2.buttonState == False:
 
 			self.g1Val = self.g1box.value()
 			self.g2Val = self.g2box.value()
@@ -363,6 +369,7 @@ class mainWindow(QWidget):
 	def fill_g2(self):
 		print("Done Filling G2")
 		self.LEDButton1.buttonState = False
+		self.jStatus = 0
 
 	def stop(self):
 		self.v1.disable()
@@ -381,6 +388,7 @@ class mainWindow(QWidget):
 		self.v4.disable()
 		print("Venting Done")
 		self.LEDButton2.buttonState = False
+		self.jStatus = 0
 
 
 
