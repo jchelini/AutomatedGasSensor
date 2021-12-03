@@ -336,7 +336,7 @@ class mainWindow(QWidget):
 
 	@pyqtSlot(bool)
 	def b2function(self, status):
-		if self.jStatus == 0:
+		if self.jStatus == 0 or self.jStatus == 1:
 			if status:
 				print("Red button is activated")
 				self.stop()
