@@ -219,10 +219,10 @@ class mainWindow(QWidget):
 	def loadComponents(self):
 		self.adc1 = adc.ADS1115(0x48)
 		self.adc2 = adc.ADS1115(0x49)
-		self.v1 = valve(24)  #G1 (methanol)
-		self.v2 = valve(22)  #G2 (ethane)
-		self.v3 = valve(18)  #AIR
-		self.v4 = valve(16)  #EXHAUST
+		self.v1 = valve(24)  #G1 (methanol), valve #1
+		self.v2 = valve(22)  #G2 (ethane), valve #5
+		self.v3 = valve(18)  #AIR, valve #6
+		self.v4 = valve(16)  #EXHAUST, valve #2
 
 		self.LEDButton1Thread = QThread()
 		self.LEDButton1 = LEDButton(adc2=self.adc2,channel= 0)
